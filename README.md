@@ -34,13 +34,11 @@ You can inspect PNG metadata with any of these methods:
 exiftool -a -G1 -s output.png
 ```
 
-- Python:
+- Node.js (`png-chunks-extract` + `png-chunk-text`):
 
-```python
-from PIL import Image
-img = Image.open("output.png")
-print(img.info.get("prompt"))
-print(img.info)  # all metadata keys
+```bash
+npm i png-chunks-extract png-chunk-text
+node -e 'const fs=require("fs");const extract=require("png-chunks-extract");const text=require("png-chunk-text");const chunks=extract(fs.readFileSync("output.png"));for(const c of chunks){if(c.name==="tEXt"){const d=text.decode(c.data);console.log(d.keyword+":", d.text)}}'
 ```
 
 - ComfyUI workflow tools that read PNG text chunks (many "Load/Info" nodes expose these fields).
