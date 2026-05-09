@@ -22,9 +22,36 @@ When enabled, the node writes `prompt` into PNG metadata. When disabled, prompt 
 
 `extra_pnginfo` metadata is still preserved when ComfyUI metadata is enabled.
 
-## View Metadata
+## Metadata Structure
 
-If `attach_prompt_metadata` is enabled, the output PNG will include a `prompt` text chunk.
+This node writes PNG text chunks (`tEXt`) using ComfyUI's standard behavior.
+
+When `attach_prompt_metadata = true`:
+
+- `prompt`: JSON string of the full ComfyUI `PROMPT` object.
+- `<extra_pnginfo key>`: JSON string value for each key in `extra_pnginfo`.
+
+When `attach_prompt_metadata = false`:
+
+- `prompt`: not written.
+- `<extra_pnginfo key>`: still written (same as core Save Image behavior).
+
+Example shape of saved text entries:
+
+```json
+{
+  "prompt": "{\"6\":{\"class_type\":\"KSampler\",\"inputs\":{...}},\"7\":{...}}",
+  "workflow": "{\"last_node_id\":42,\"last_link_id\":108,...}",
+  "other_key": "{\"any\":\"json-serializable value\"}"
+}
+```
+
+Notes:
+
+- Values are stored as JSON-encoded strings, not nested PNG binary objects.
+- If ComfyUI is started with metadata disabled (for example `--disable-metadata`), no PNG text metadata is written.
+
+## View Metadata
 
 You can inspect PNG metadata with any of these methods:
 
