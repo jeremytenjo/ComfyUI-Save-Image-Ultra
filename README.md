@@ -21,3 +21,26 @@ When enabled, the node writes `prompt` into PNG metadata. When disabled, prompt 
   - `attach_prompt_metadata` (`BOOLEAN`, default `false`)
 
 `extra_pnginfo` metadata is still preserved when ComfyUI metadata is enabled.
+
+## View Metadata
+
+If `attach_prompt_metadata` is enabled, the output PNG will include a `prompt` text chunk.
+
+You can inspect PNG metadata with any of these methods:
+
+- macOS/Linux (`exiftool`):
+
+```bash
+exiftool -a -G1 -s output.png
+```
+
+- Python:
+
+```python
+from PIL import Image
+img = Image.open("output.png")
+print(img.info.get("prompt"))
+print(img.info)  # all metadata keys
+```
+
+- ComfyUI workflow tools that read PNG text chunks (many "Load/Info" nodes expose these fields).
