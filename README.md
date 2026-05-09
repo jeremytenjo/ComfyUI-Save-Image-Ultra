@@ -1,6 +1,6 @@
-# ComfyUI Save Image
+# ComfyUI Save Image Ultra
 
-Custom ComfyUI output node that mirrors core `Save Image` behavior and adds a boolean toggle:
+Custom ComfyUI output node that mirrors core `Save Image` behavior and adds a boolean toggle (Ultra edition):
 
 - `attach_prompt_metadata` (default: `false`)
 
