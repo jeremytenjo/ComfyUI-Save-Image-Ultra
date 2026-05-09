@@ -76,6 +76,8 @@ class SaveImageWithPromptToggle:
                     metadata.add_text("prompt", json.dumps(prompt))
                 if extra_pnginfo is not None:
                     for key, value in extra_pnginfo.items():
+                        if key == "workflow":
+                            continue
                         metadata.add_text(key, json.dumps(value))
 
             filename_with_batch_num = filename.replace("%batch_num%", str(batch_number))
