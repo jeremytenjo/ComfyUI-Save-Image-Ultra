@@ -13,7 +13,7 @@ When enabled, the node writes `prompt` into PNG metadata. When disabled, prompt 
 
 ## Node
 
-- Display name: `Save Image (Prompt Metadata Toggle)`
+- Display name: `Save Image Ultra`
 - Category: `image`
 - Inputs:
   - `images` (`IMAGE`)
