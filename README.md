@@ -4,7 +4,7 @@ Custom ComfyUI output node that mirrors core `Save Image` behavior and adds a bo
 
 - `attach_prompt_metadata` (default: `false`)
 
-When enabled, the node writes `prompt` into PNG metadata. When disabled, prompt metadata is not embedded.
+When enabled, the node writes prompt-related PNG metadata. When disabled, this node writes no PNG metadata.
 
 ## Install
 
@@ -20,27 +20,24 @@ When enabled, the node writes `prompt` into PNG metadata. When disabled, prompt 
   - `filename_prefix` (`STRING`)
   - `attach_prompt_metadata` (`BOOLEAN`, default `false`)
 
-`extra_pnginfo` metadata is still preserved when ComfyUI metadata is enabled.
-
 ## Metadata Structure
 
 This node writes PNG text chunks (`tEXt`) using ComfyUI's standard behavior.
 
 When `attach_prompt_metadata = true`:
 
-- `prompt`: JSON string of the full ComfyUI `PROMPT` object.
+- `prompt`: plain prompt text (best match extracted from prompt `text` fields).
 - `<extra_pnginfo key>`: JSON string value for each key in `extra_pnginfo`, except `workflow`.
 
 When `attach_prompt_metadata = false`:
 
-- `prompt`: not written.
-- `<extra_pnginfo key>`: still written except `workflow`.
+- No PNG metadata is written by this node.
 
 Example shape of saved text entries:
 
 ```json
 {
-  "prompt": "{\"6\":{\"class_type\":\"KSampler\",\"inputs\":{...}},\"7\":{...}}",
+  "prompt": "mirror selfie of a young woman ... relaxed editorial mood",
   "other_key": "{\"any\":\"json-serializable value\"}"
 }
 ```

@@ -48,6 +48,42 @@ class SaveImageWithPromptToggle:
     CATEGORY = "image"
     DESCRIPTION = "Saves images like the core Save Image node, with optional prompt metadata embedding."
 
+    @staticmethod
+    def _extract_prompt_text(prompt):
+        if isinstance(prompt, str):
+            text = prompt.strip()
+            return text or None
+
+        if not isinstance(prompt, (dict, list)):
+            return None
+
+        text_values = []
+        stack = [prompt]
+        while stack:
+            current = stack.pop()
+            if isinstance(current, dict):
+                for key, value in current.items():
+                    if key == "text" and isinstance(value, str):
+                        text = value.strip()
+                        if text:
+                            text_values.append(text)
+                    elif isinstance(value, (dict, list)):
+                        stack.append(value)
+            elif isinstance(current, list):
+                for value in current:
+                    if isinstance(value, (dict, list)):
+                        stack.append(value)
+                    elif isinstance(value, str):
+                        text = value.strip()
+                        if text:
+                            text_values.append(text)
+
+        if not text_values:
+            return None
+
+        # Prefer the most descriptive prompt candidate when multiple text fields exist.
+        return max(text_values, key=len)
+
     def save_images(
         self,
         images,
@@ -70,10 +106,12 @@ class SaveImageWithPromptToggle:
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
 
             metadata = None
-            if not args.disable_metadata:
+            if not args.disable_metadata and attach_prompt_metadata:
                 metadata = PngInfo()
-                if attach_prompt_metadata and prompt is not None:
-                    metadata.add_text("prompt", json.dumps(prompt))
+                if prompt is not None:
+                    prompt_text = self._extract_prompt_text(prompt)
+                    if prompt_text is not None:
+                        metadata.add_text("prompt", prompt_text)
                 if extra_pnginfo is not None:
                     for key, value in extra_pnginfo.items():
                         if key.lower() == "workflow":
