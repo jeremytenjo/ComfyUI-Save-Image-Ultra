@@ -1,4 +1,3 @@
-import json
 import os
 
 import numpy as np
@@ -112,11 +111,6 @@ class SaveImageWithPromptToggle:
                     prompt_text = self._extract_prompt_text(prompt)
                     if prompt_text is not None:
                         metadata.add_text("prompt", prompt_text)
-                if extra_pnginfo is not None:
-                    for key, value in extra_pnginfo.items():
-                        if key.lower() == "workflow":
-                            continue
-                        metadata.add_text(key, json.dumps(value))
 
             filename_with_batch_num = filename.replace("%batch_num%", str(batch_number))
             file = f"{filename_with_batch_num}_{counter:05}_.png"

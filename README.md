@@ -27,7 +27,6 @@ This node writes PNG text chunks (`tEXt`) using ComfyUI's standard behavior.
 When `attach_prompt_metadata = true`:
 
 - `prompt`: plain prompt text (best match extracted from prompt `text` fields).
-- `<extra_pnginfo key>`: JSON string value for each key in `extra_pnginfo`, except `workflow`.
 
 When `attach_prompt_metadata = false`:
 
@@ -37,15 +36,13 @@ Example shape of saved text entries:
 
 ```json
 {
-  "prompt": "mirror selfie of a young woman ... relaxed editorial mood",
-  "other_key": "{\"any\":\"json-serializable value\"}"
+  "prompt": "mirror selfie of a young woman ... relaxed editorial mood"
 }
 ```
 
 Notes:
 
-- Values are stored as JSON-encoded strings, not nested PNG binary objects.
-- `workflow` is never written by this node.
+- Only the `prompt` text key is written by this node when enabled.
 - If ComfyUI is started with metadata disabled (for example `--disable-metadata`), no PNG text metadata is written.
 
 ## View Metadata
